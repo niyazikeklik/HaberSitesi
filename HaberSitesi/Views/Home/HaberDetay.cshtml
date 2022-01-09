@@ -1,0 +1,48 @@
+﻿@using HaberSitesi.Database
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Haber
+
+<div class="single-news">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="sn-container">
+                    <div class="sn-img">
+                        <img src="~/img/@Model.FotoURL" />
+                    </div>
+                    <div class="sn-content">
+                        <h1 class="sn-title">@Model.Baslik</h1>
+                        <p>
+                            @Model.Detay
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="sidebar-widget">
+                        <h2 class="sw-title">Bu Kategoriden</h2>
+                        <div class="news-list">
+                            @foreach (var item in API.GetHaberList().Where(x=> x.Kategori == Model.Kategori))
+                            {
+                                   <div class="nl-item">
+                                <div class="nl-img">
+                                    <img src="~/img/@item.FotoURL" />
+                                </div>
+                                <div class="nl-title">
+                                    <a href="@Url.Action("HaberDetay", "Home", new {id = item.HaberID})">@item.Baslik</a>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

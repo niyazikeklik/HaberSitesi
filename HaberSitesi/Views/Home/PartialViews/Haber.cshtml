@@ -1,0 +1,10 @@
+﻿@model Haber
+
+<div class="col-md-6">
+    <div class="cn-img">
+        <img src="~/img/@Model.FotoURL" />
+        <div class="cn-title">
+            <a href="@Url.Action("HaberDetay", "Home", new {id = Model.HaberID})">@Model.Baslik</a>
+        </div>
+    </div>
+</div>

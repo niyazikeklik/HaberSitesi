@@ -1,0 +1,20 @@
+﻿@page "/admin"
+@{ Layout = null; }
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@*Sayfaya giriş yapmadan göremezin!!*@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="~/" />
+    <title>FinalUygulama Admin</title>
+    <link href="~/lib/template/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/default-base.css">
+</head>
+<body>
+    <component type="typeof(Routed)" render-mode="Server" />
+    <script src="/_framework/blazor.server.js"></script>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+</body>
+</html>

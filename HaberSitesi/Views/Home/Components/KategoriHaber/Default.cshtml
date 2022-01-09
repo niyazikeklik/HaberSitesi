@@ -1,0 +1,13 @@
+﻿@model List<Haber>
+
+
+
+<h2>@Model[0].Kategori</h2>
+<div class="cn-slider">
+    @foreach (var item in Model)
+    {
+        @await Html.PartialAsync(@"~/Views/Home/PartialViews/Haber.cshtml", item)
+    }
+</div>
+
+

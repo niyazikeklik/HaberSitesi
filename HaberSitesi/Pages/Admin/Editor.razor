@@ -1,0 +1,89 @@
+﻿@*@page "/admin/haber/edit/{id:long}"
+@page "/admin/haber/create"
+@inherits OwningComponentBase<FinalUygulama.Data.FinalUygulamaContext>
+
+
+<style>
+    div.validation-message {
+        color: rgb(220, 53, 69);
+        font-weight: 500
+    }
+</style>
+
+<h3 class="bg-@ThemeColor text-white text-center p-1">Haber @TitleText</h3>
+<EditForm Model="Haber" OnValidSubmit="SaveHaber">
+    <DataAnnotationsValidator />
+    @if (Haber.HaberID != 0)
+    {
+<div class="form-group">
+    <label>ID</label>
+    <input class="form-control" disabled value="@Haber.HaberID" />
+</div>}
+    <div class="form-group">
+        <label>Başlık</label>
+        <ValidationMessage For="@(() => Haber.HaberBaslik)" />
+        <InputText class="form-control" @bind-Value="Haber.Baslik" />
+    </div>
+    <div class="form-group">
+        <label>Detay</label>
+        <ValidationMessage For="@(() => Haber.Detay)" />
+        <InputTextArea class="form-control" @bind-Value="Haber.Detay" />
+    </div>
+    <div class="form-group">
+        <label>Resim Yolu</label>
+        <ValidationMessage For="@(() => Haber.FotoURL)" />
+        <InputText class="form-control" @bind-Value=" Haber.FotoURL" />
+    </div>
+    <div class="form-group">
+        <label>Kategori</label>
+        <ValidationMessage For="@(() => Haber.Kategori)" />
+        <InputText class="form-control" @bind-Value="Haber.Kategori" />
+    </div>   
+    @*<div class="form-group">
+        <label>Tarih</label>
+        <ValidationMessage For="@(() => Haber.HaberTarihi)" />
+        <InputDate   class="form-control" @bind-Value="Haber.HaberTarihi" />
+    </div>
+    <button type="submit" class="btn btn-@ThemeColor">Kaydet</button>
+    <NavLink class="btn btn-secondary" href="/admin/haber">Vazgeç</NavLink>
+</EditForm>
+
+@code { public FinalUygulama.Data.FinalUygulamaContext Repository => Service;
+
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+
+    [Parameter]
+    public long Id { get; set; } = 0;
+
+    public Haber Haber { get; set; } = new Haber();
+
+    protected override void OnParametersSet()
+    {
+        if (Id != 0)
+        {
+            Haber = Repository.Haber.FirstOrDefault(p => p.HaberID == Id);
+
+        }
+    }
+
+    public void SaveHaber()
+    {
+        if (Id == 0)
+        {            
+            Haber.HaberTarihi = DateTime.Now.ToShortDateString();
+            Repository.Add(Haber);
+            Repository.SaveChanges();
+        }
+        else
+        {
+            Repository.Update(Haber);
+            Repository.SaveChanges();
+        }
+        NavManager.NavigateTo("/admin/haber");
+    }
+
+    public string ThemeColor => Id == 0 ? "primary" : "warning";
+    public string TitleText => Id == 0 ? "Oluştur" : "Düzenle";
+    }
+*@

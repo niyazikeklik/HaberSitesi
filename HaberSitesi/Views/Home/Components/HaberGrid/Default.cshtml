@@ -1,0 +1,22 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<Haber>
+@{
+}
+<div class="main-news">
+    <div class="container">
+         <h2>Son Haberler</h2>
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        @await Html.PartialAsync(@"~/Views/Home/PartialViews/GridHaber.cshtml", item)
+                    }
+                </div>
+            </div>
+              @await Component.InvokeAsync(@"ReadMeMore")
+        </div>
+    </div>
+</div>

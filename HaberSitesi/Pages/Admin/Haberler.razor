@@ -1,0 +1,88 @@
+﻿@*@page "/admin/haber"
+@page "/admin"
+@inherits OwningComponentBase<FinalUygulama.Data.FinalUygulamaContext>
+
+<style>
+    .elipsis {
+        display: -webkit-box;
+        -webkit-line-clamp:2; /*Kaç Stırda sınırlamak istiyorsanız */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        width:30vw;
+    }
+</style>
+
+<h4>Haberler sayfası</h4>
+
+<table class="table table-sm table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>Tarih</th>
+            <th>Düzenle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (HaberData?.Count() > 0)
+        {
+@foreach (Haber h in HaberData)
+{
+<tr>
+    <td>@h.HaberID</td>
+    <td style="width:35vw;">@h.HaberBaslik</td>
+    <td class="elipsis">@h.HaberAciklama</td>
+    <td>@h.HaberTarihi</td>
+    <td>
+        <NavLink class="btn btn-info btn-sm"
+                 href="@GetDetailsUrl(h.HaberID)">
+            Detay
+        </NavLink>
+        <NavLink class="btn btn-warning btn-sm"
+                 href="@GetEditUrl(h.HaberID)">
+            Düzenle
+        </NavLink>
+        <button class="btn btn-danger btn-sm"
+                @onclick="@(e => DeleteHaber(h))">
+            Sil
+        </button>
+    </td>
+</tr>
+} }
+else
+{
+<tr>
+    <td colspan="5" class="text-center">Haber Yok</td>
+</tr>
+}
+    </tbody>
+</table>
+
+<NavLink class="btn btn-primary" href="/admin/haber/create">Oluştur</NavLink>
+
+@code { public FinalUygulama.Data.FinalUygulamaContext Repository => Service;
+
+    public IEnumerable<Haber> HaberData { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await UpdateData();
+    }
+
+    public async Task UpdateData()
+    {
+        HaberData = await Repository.Haber.ToListAsync();
+    }
+
+    public async Task DeleteHaber(Haber h)
+    {
+        Repository.Haber.Remove(h);
+        Repository.SaveChanges();
+        await UpdateData();
+    }
+
+    public string GetDetailsUrl(long id) => $"/admin/habers/details/{id}";
+    public string GetEditUrl(long id) => $"/admin/haber/edit/{id}"; }
+
+*@

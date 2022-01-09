@@ -1,0 +1,19 @@
+﻿
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<Haber>
+@{
+
+}
+<div class="col-lg-3">
+    <div class="mn-list">
+        <h2>Daha fazla oku</h2>
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li><a href="@Url.Action("HaberDetay", "Home", new {id = item.HaberID})">@item.Baslik</a></li>
+            }
+        </ul>
+    </div>
+</div>

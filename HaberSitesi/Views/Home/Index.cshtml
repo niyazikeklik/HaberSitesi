@@ -1,0 +1,46 @@
+@using HaberSitesi.Database
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<Haber>
+@{
+    var enums = Enum.GetValues<Kategoriler>();
+    var x = Model;
+}
+<!-- Top News Start-->
+<div class="top-news">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 tn-left">
+                @await Html.PartialAsync(@"PartialViews\Slider.cshtml", Model)
+            </div>
+            <div class="col-md-6 tn-right">
+                @Component.InvokeAsync(@"Tamplete").Result
+            </div>
+        </div>
+    </div>
+</div>
+<div class="cat-news container">
+    <div class="row">
+
+        @foreach (var item in enums)
+        {
+            <div class="col-md-6">
+                @{
+                    var kat = (Kategoriler)item;
+                }
+                @if (Model.Any(x => (x.Kategori) == kat))
+                {
+                    @await Component.InvokeAsync(@"KategoriHaber", (int)item);
+                }
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+@await Component.InvokeAsync(@"HaberGrid")
+<!-- Tab News Start-->
+<!-- Main News Start-->
