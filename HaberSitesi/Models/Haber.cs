@@ -2,6 +2,7 @@
 
 namespace HaberSitesi.Models
 {
+    //Kategorileri tutan enum (çok önemli değil)
     public enum Kategoriler
     {
         Ekonomi=0,
@@ -11,9 +12,11 @@ namespace HaberSitesi.Models
         Teknoloji=4,
         Spor=5,
     }
+    //Haber modeli.
+
     public class Haber
     {
-        [Key]
+        [Key]//HaberID sutununun primarykey olduğunu söylüyor.
         public int HaberID { get; set; }
         public string Baslik { get; set; }
         public string Detay { get; set; }

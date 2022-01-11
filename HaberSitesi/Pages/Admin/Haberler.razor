@@ -1,6 +1,6 @@
-﻿@*@page "/admin/haber"
+﻿@page "/admin/haber"
 @page "/admin"
-@inherits OwningComponentBase<FinalUygulama.Data.FinalUygulamaContext>
+@inherits OwningComponentBase<HaberSitesi.Database.DatabaseContext>
 
 <style>
     .elipsis {
@@ -19,8 +19,6 @@
         <tr>
             <th>ID</th>
             <th>Başlık</th>
-            <th>Açıklama</th>
-            <th>Tarih</th>
             <th>Düzenle</th>
         </tr>
     </thead>
@@ -31,9 +29,7 @@
 {
 <tr>
     <td>@h.HaberID</td>
-    <td style="width:35vw;">@h.HaberBaslik</td>
-    <td class="elipsis">@h.HaberAciklama</td>
-    <td>@h.HaberTarihi</td>
+    <td style="width:35vw;">@h.Baslik</td>
     <td>
         <NavLink class="btn btn-info btn-sm"
                  href="@GetDetailsUrl(h.HaberID)">
@@ -61,7 +57,8 @@ else
 
 <NavLink class="btn btn-primary" href="/admin/haber/create">Oluştur</NavLink>
 
-@code { public FinalUygulama.Data.FinalUygulamaContext Repository => Service;
+@code { 
+    public HaberSitesi.Database.DatabaseContext Repository => Service;
 
     public IEnumerable<Haber> HaberData { get; set; }
 
@@ -72,12 +69,12 @@ else
 
     public async Task UpdateData()
     {
-        HaberData = await Repository.Haber.ToListAsync();
+        HaberData = await Repository.Haberler.ToListAsync();
     }
 
     public async Task DeleteHaber(Haber h)
     {
-        Repository.Haber.Remove(h);
+        Repository.Haberler.Remove(h);
         Repository.SaveChanges();
         await UpdateData();
     }
@@ -85,4 +82,3 @@ else
     public string GetDetailsUrl(long id) => $"/admin/habers/details/{id}";
     public string GetEditUrl(long id) => $"/admin/haber/edit/{id}"; }
 
-*@

@@ -12,7 +12,7 @@
             <div class="col-lg-8">
                 <div class="sn-container">
                     <div class="sn-img">
-                        <img src="~/img/@Model.FotoURL" />
+                        <img src="~/img/HaberFoto/@Model.FotoURL" />
                     </div>
                     <div class="sn-content">
                         <h1 class="sn-title">@Model.Baslik</h1>
@@ -32,7 +32,7 @@
                             {
                                    <div class="nl-item">
                                 <div class="nl-img">
-                                    <img src="~/img/@item.FotoURL" />
+                                    <img src="~/img/HaberFoto/@item.FotoURL" />
                                 </div>
                                 <div class="nl-title">
                                     <a href="@Url.Action("HaberDetay", "Home", new {id = item.HaberID})">@item.Baslik</a>

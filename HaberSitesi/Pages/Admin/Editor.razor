@@ -1,7 +1,9 @@
-﻿@*@page "/admin/haber/edit/{id:long}"
+﻿@page "/admin/haber/edit/{id:long}"
 @page "/admin/haber/create"
-@inherits OwningComponentBase<FinalUygulama.Data.FinalUygulamaContext>
-
+@using System.IO
+@using Microsoft.JSInterop
+@inherits OwningComponentBase<HaberSitesi.Database.DatabaseContext>
+@inject IJSRuntime jsRuntime
 
 <style>
     div.validation-message {
@@ -15,13 +17,14 @@
     <DataAnnotationsValidator />
     @if (Haber.HaberID != 0)
     {
-<div class="form-group">
-    <label>ID</label>
-    <input class="form-control" disabled value="@Haber.HaberID" />
-</div>}
+        <div class="form-group">
+            <label>ID</label>
+            <input class="form-control" disabled value="@Haber.HaberID" />
+        </div>
+    }
     <div class="form-group">
         <label>Başlık</label>
-        <ValidationMessage For="@(() => Haber.HaberBaslik)" />
+        <ValidationMessage For="@(() => Haber.Baslik)" />
         <InputText class="form-control" @bind-Value="Haber.Baslik" />
     </div>
     <div class="form-group">
@@ -29,61 +32,99 @@
         <ValidationMessage For="@(() => Haber.Detay)" />
         <InputTextArea class="form-control" @bind-Value="Haber.Detay" />
     </div>
+
     <div class="form-group">
-        <label>Resim Yolu</label>
-        <ValidationMessage For="@(() => Haber.FotoURL)" />
-        <InputText class="form-control" @bind-Value=" Haber.FotoURL" />
+        <label>Resim Seç</label>
+        <InputSelect @bind-Value="Haber.FotoURL" class="form-control">
+            @foreach (var item in FileList)
+            {
+                <option value="@item">@item</option>
+            }
+        </InputSelect>
     </div>
+@*    <div class="form-group">
+        <label>Resim Yükle</label>
+        <InputFile class="form-control" OnChange="OnInputFileChange" @bind-Value="Haber.FotoURL"/>
+    </div>*@
     <div class="form-group">
         <label>Kategori</label>
         <ValidationMessage For="@(() => Haber.Kategori)" />
-        <InputText class="form-control" @bind-Value="Haber.Kategori" />
-    </div>   
-    @*<div class="form-group">
-        <label>Tarih</label>
-        <ValidationMessage For="@(() => Haber.HaberTarihi)" />
-        <InputDate   class="form-control" @bind-Value="Haber.HaberTarihi" />
+        <InputSelect class="form-control" @bind-Value="Haber.Kategori">
+            @for (var i = 0; i < list.Count; i++)
+            {
+                <option value="@i">@list[i]</option>
+            }
+        </InputSelect>
     </div>
     <button type="submit" class="btn btn-@ThemeColor">Kaydet</button>
     <NavLink class="btn btn-secondary" href="/admin/haber">Vazgeç</NavLink>
+   
 </EditForm>
-
-@code { public FinalUygulama.Data.FinalUygulamaContext Repository => Service;
+ 
+@code {
+    public HaberSitesi.Database.DatabaseContext Repository => Service;
 
     [Inject]
     public NavigationManager NavManager { get; set; }
+    public List<string> Fotograflar = new List<string>()
+    {
 
+    };
     [Parameter]
     public long Id { get; set; } = 0;
 
     public Haber Haber { get; set; } = new Haber();
-
+    public string HaberKategori { get; set; }
+    public List<string> list { get; set; } = Enum.GetNames<Kategoriler>().ToList();
+    public static List<string> FileList { get; set; } = FileListSet(); 
     protected override void OnParametersSet()
     {
         if (Id != 0)
         {
-            Haber = Repository.Haber.FirstOrDefault(p => p.HaberID == Id);
-
+            Haber = Repository.Haberler.FirstOrDefault(p => p.HaberID == Id);
+            HaberKategori = Haber.Kategori.ToString();
         }
     }
 
     public void SaveHaber()
     {
         if (Id == 0)
-        {            
-            Haber.HaberTarihi = DateTime.Now.ToShortDateString();
+        {
             Repository.Add(Haber);
             Repository.SaveChanges();
-        }
-        else
+        } else
         {
             Repository.Update(Haber);
             Repository.SaveChanges();
         }
         NavManager.NavigateTo("/admin/haber");
     }
+    public static List<string> FileListSet()
+    {
+        FileList = new List<string>();
+        var x = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/img/HaberFoto"));
+        foreach (var item in x)
+        {
+            FileList.Add(new System.IO.FileInfo(item).Name);
+        }
+        return FileList;
+    }
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var selectedFiles = e.GetMultipleFiles();
+        foreach (var file in selectedFiles)
+        {
+            Stream stream = file.OpenReadStream();
+            var path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/img/HaberFoto/{file.Name}");
+            FileStream fs = File.Create(path);
+            stream.CopyToAsync(fs).Wait();
+            stream.Close();
+            fs.Close();
+        }
+
+        this.StateHasChanged();
+    }
 
     public string ThemeColor => Id == 0 ? "primary" : "warning";
     public string TitleText => Id == 0 ? "Oluştur" : "Düzenle";
     }
-*@

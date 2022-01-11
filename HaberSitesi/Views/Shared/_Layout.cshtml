@@ -81,15 +81,9 @@
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto">
                         <a href="@Url.ActionLink("Index","Home")" class="nav-item nav-link active">Ana Sayfa</a>
-                        @if (Repos.Login)
-                        {
-                            <a href="@Url.ActionLink("AdminPanel","Home")" class="nav-item nav-link">Admin Paneli</a>
-                            <a href="@Url.ActionLink("CikisYap","Home")" class="nav-item nav-link">Çıkış Yap</a>
-                        } else
-                        {
-                            <a href="@Url.ActionLink("Login","Home")" class="nav-item nav-link">Giriş Yap</a>
-                              <a href="@Url.ActionLink("KayıtOl","Home")" class="nav-item nav-link">Kayıt Ol</a>
-                        }
+                        <a href="@Url.ActionLink("Login","Account")" class="nav-item nav-link">Admin Giriş</a>
+                          
+                        
 
 
                     </div>

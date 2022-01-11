@@ -4,7 +4,7 @@
 *@
 @model List<Haber>
 @{
-    var enums = Enum.GetValues<Kategoriler>();
+    var enums = Enum.GetValues(typeof(Kategoriler));
     var x = Model;
 }
 <!-- Top News Start-->

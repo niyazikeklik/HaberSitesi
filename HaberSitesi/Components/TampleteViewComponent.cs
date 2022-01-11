@@ -1,6 +1,7 @@
 ﻿using HaberSitesi.Database;
 using HaberSitesi.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 using System.Linq;
 
@@ -10,7 +11,10 @@ namespace HaberSitesi.Components
     {
 		public IViewComponentResult Invoke()
 		{
-			var x = new DatabaseContext();
+			DatabaseContext context = Repos.app.ApplicationServices
+					   .CreateScope().ServiceProvider
+					   .GetRequiredService<DatabaseContext>();
+			var x = context;
 			var y = x.Haberler.ToList().Take(4).ToList();
 			return View(y);
 		}

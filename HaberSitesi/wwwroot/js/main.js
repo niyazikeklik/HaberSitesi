@@ -125,3 +125,6 @@
     });
 })(jQuery);
 
+function HelloWorldPrint() {
+    console.log("Hellooo");
+}

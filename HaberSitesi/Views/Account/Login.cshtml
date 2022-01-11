@@ -1,4 +1,5 @@
-﻿@model ErrorResult
+﻿@using HaberSitesi.Models.ViewModels
+@model LoginModel
 @{
    
 }
@@ -8,18 +9,17 @@
         <div class="row align-items-center">
             <div class="col-md-8">
                 <div class="contact-form">
-                    <form asp-controller="Home">
+                    <form asp-controller="Account">
                         <div class="form-group">
-                            <input type="text" name="UserID" class="form-control" placeholder="Kullanıcı Adı" />
+                            <input type="text" value="admin" name="Name" class="form-control" placeholder="Kullanıcı Adı" />
                         </div>
                         <div class="form-group">
-                           <input type="password" name="Pass" class="form-control" placeholder="Şifre" />
+                           <input type="password" value="Secret123$" name="Password" class="form-control" placeholder="Şifre" />
                         </div>
                         <div class="row">
-                            <div><button asp-action="GirisYap" class="btn btn-success" style="margin-right: 10px;" type="submit">Giriş Yap</button></div>
+                            <div><button asp-action="Login" class="btn btn-success" style="margin-right: 10px;" type="submit">Giriş Yap</button></div>
                         </div>
                     </form>
-                    <label> @Model?.Message </label>
                 </div>
             </div>
         </div>

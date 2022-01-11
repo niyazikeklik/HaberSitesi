@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 using Newtonsoft.Json;
 
@@ -9,6 +10,7 @@ using System.Linq;
 
 namespace HaberSitesi.Controllers
 {
+	//Api controller'dır
 	[Route("api/[controller]")]
 	[ApiController]
 	public class HaberController : ControllerBase
@@ -16,7 +18,11 @@ namespace HaberSitesi.Controllers
 		[HttpGet("GetHaberList")]
 		public IActionResult GetHaberList()
 		{
-			string jsonurl = JsonConvert.SerializeObject(new DatabaseContext().Haberler.ToList());
+			//Bu method çağrıldığında veritabanındaki haberler tablosunu olduğu gibi alıp json fomatında bir string olarak döner
+			DatabaseContext context = Repos.app.ApplicationServices
+					.CreateScope().ServiceProvider
+					.GetRequiredService<DatabaseContext>();
+			string jsonurl = JsonConvert.SerializeObject(context.Haberler.ToList());
 			return Content(jsonurl);
 		}
 	}

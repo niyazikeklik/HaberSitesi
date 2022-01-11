@@ -2,6 +2,7 @@
 
 using HaberSitesi.Models.ViewModels;
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace HaberSitesi.Controllers
 {
     public class AccountController : Controller
     {
+        //IdentityUser hazır bir kullanıcı modelidii
         private UserManager<IdentityUser> userManager;
         private SignInManager<IdentityUser> signInManager;
 
@@ -33,15 +35,21 @@ namespace HaberSitesi.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Eğer kullanıcı name'e göre bir kayıt varsa
                 IdentityUser user =
-                    await userManager.FindByNameAsync(loginModel.Name);
+                     userManager.FindByNameAsync(loginModel.Name).Result;
                 if (user != null)
                 {
+
                     await signInManager.SignOutAsync();
+                    //Eğer paramaetre gelen loginUser şifresi eşleşiyor ise 
                     if ((await signInManager.PasswordSignInAsync(user,
                             loginModel.Password, false, false)).Succeeded)
                     {
-                        return Redirect(loginModel?.ReturnUrl ?? "/Admin");
+                        //Login yaptırıp admin page razor sayfasını dönüyorum.
+                        var x = await signInManager.CreateUserPrincipalAsync(user);
+                        await HttpContext.SignInAsync(x);
+                        return Redirect("/admin");
                     }
                 }
             }
@@ -53,6 +61,7 @@ namespace HaberSitesi.Controllers
         public async Task<RedirectResult> Logout(string returnUrl = "/")
         {
             await signInManager.SignOutAsync();
+            await HttpContext.SignOutAsync();
             return Redirect(returnUrl);
         }
     }

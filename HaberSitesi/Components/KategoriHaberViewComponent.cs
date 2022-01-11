@@ -2,6 +2,7 @@
 using HaberSitesi.Models;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 using System.Linq;
 
@@ -12,7 +13,10 @@ namespace HaberSitesi.Components
 		public IViewComponentResult Invoke(int kategori)
 		{
 			var kat = ((Kategoriler)kategori);
-			var x = new DatabaseContext();
+			DatabaseContext context = Repos.app.ApplicationServices
+					.CreateScope().ServiceProvider
+					.GetRequiredService<DatabaseContext>();
+			var x = context;
 			var y = x.Haberler.Where(x=> x.Kategori == kat).ToList();
 			return View(y);
 		}

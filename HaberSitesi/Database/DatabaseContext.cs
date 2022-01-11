@@ -6,13 +6,14 @@ namespace HaberSitesi.Database
 {
     public class DatabaseContext : DbContext
     {
-       // string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=HaberSitesiDB;Integrated Security=True";
-        string connectionString = @"Server=tcp:dbserverhaber.database.windows.net,1433;Initial Catalog=haberSitesiDB;Persist Security Info=False;User ID=niyazi;Password=Pas12345;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //DatabaseContext sınıfı genel olarak veritabanını simgeler, veritabanı içinde bulunan tablolara databasecontext sınıfı üzerinden ulaşabiliriz.
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+          : base(options)
         {
-            optionsBuilder.UseSqlServer(connectionString).EnableDetailedErrors();
         }
+
+        //Veritabanındaki haberler tablosunu simgeler
+        //get ve set methodları üzerinden veritabanındaki haberler tablosuna ekleme, silme, güncelleme, listeleme gibi işlemler yaptırılabilir.
         public DbSet<Haber> Haberler { get; set; }
-        public DbSet<Hesap> Hesaplar { get; set; }
     }
 }
