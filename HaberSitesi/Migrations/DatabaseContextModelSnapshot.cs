@@ -41,22 +41,6 @@ namespace HaberSitesi.Migrations
 
                     b.ToTable("Haberler");
                 });
-
-            modelBuilder.Entity("HaberSitesi.Models.Hesap", b =>
-                {
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Mail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Pass")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserID");
-
-                    b.ToTable("Hesaplar");
-                });
 #pragma warning restore 612, 618
         }
     }

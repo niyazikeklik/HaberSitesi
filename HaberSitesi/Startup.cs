@@ -28,22 +28,20 @@ namespace HaberSitesi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
-
-
-            services.AddDbContext<IdentityContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DatabaseContext")));
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddDistributedMemoryCache();
             services.AddSession();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityContext>();
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();
             services.AddScoped<ContextMenuService>();
+
+            services.AddDbContext<IdentityContext>(options =>
+             options.UseSqlServer(Configuration.GetConnectionString("DatabaseContext")));
+            services.AddIdentity<IdentityUser, IdentityRole>()
+             .AddEntityFrameworkStores<IdentityContext>();
             services.AddDbContext<DatabaseContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DatabaseContext")));
         }
@@ -76,7 +74,25 @@ namespace HaberSitesi
             {
                 context.Database.Migrate();
             }
-
+            var context2 = Repos.app.ApplicationServices
+           .CreateScope().ServiceProvider
+           .GetRequiredService<IdentityContext>();
+            if (context2.Database.GetPendingMigrations().Any())
+            {
+                context2.Database.Migrate();
+            }
+			if (!context2.Users.Any())
+			{
+                IdentityUser user = new IdentityUser
+                {
+                    NormalizedUserName = "admin",
+                    NormalizedEmail = "admin",
+                    UserName = "admin",
+                    PasswordHash = "AQAAAAEAACcQAAAAEKmwahTTmxu5PlCgR9v+SqGEF/9Z/sYH/ErSI+XglQKqBqyj2RmNx8WFPQ6Jsuka+g=="
+                };
+                context2.Users.Add(user);
+                context2.SaveChanges();
+			}
             var x = context;
             x.Haberler.RemoveRange(x.Haberler);
             x.SaveChanges();

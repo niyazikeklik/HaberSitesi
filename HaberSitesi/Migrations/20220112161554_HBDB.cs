@@ -2,7 +2,7 @@
 
 namespace HaberSitesi.Migrations
 {
-    public partial class last : Migration
+    public partial class HBDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,28 +21,12 @@ namespace HaberSitesi.Migrations
                 {
                     table.PrimaryKey("PK_Haberler", x => x.HaberID);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "Hesaplar",
-                columns: table => new
-                {
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Mail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Pass = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Hesaplar", x => x.UserID);
-                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Haberler");
-
-            migrationBuilder.DropTable(
-                name: "Hesaplar");
         }
     }
 }

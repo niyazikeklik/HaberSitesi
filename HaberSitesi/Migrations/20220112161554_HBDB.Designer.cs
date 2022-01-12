@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HaberSitesi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220103090606_last")]
-    partial class last
+    [Migration("20220112161554_HBDB")]
+    partial class HBDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,22 +42,6 @@ namespace HaberSitesi.Migrations
                     b.HasKey("HaberID");
 
                     b.ToTable("Haberler");
-                });
-
-            modelBuilder.Entity("HaberSitesi.Models.Hesap", b =>
-                {
-                    b.Property<string>("UserID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Mail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Pass")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserID");
-
-                    b.ToTable("Hesaplar");
                 });
 #pragma warning restore 612, 618
         }
