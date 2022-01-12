@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace HaberSitesi.Migrations
+namespace HaberSitesi.Migrations.Database
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220112161554_HBDB")]
-    partial class HBDB
+    [Migration("20220112171756_Secon")]
+    partial class Secon
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

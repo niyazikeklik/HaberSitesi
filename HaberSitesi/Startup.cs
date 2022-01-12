@@ -17,6 +17,9 @@ namespace HaberSitesi
 {
     public class Startup
     {
+
+        // string sql = @"Server=tcp:dbserverhaber.database.windows.net,1433;Initial Catalog=haberSitesiDB;Persist Security Info=False;User ID=niyazi;Password=Pas12345;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=120;";
+        string sql = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=haberSitesiDB;Integrated Security=SSPI;";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,6 +30,7 @@ namespace HaberSitesi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+           // string sql = Configuration.GetConnectionString("DatabaseContext");
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -39,11 +43,11 @@ namespace HaberSitesi
             services.AddScoped<ContextMenuService>();
 
             services.AddDbContext<IdentityContext>(options =>
-             options.UseSqlServer(Configuration.GetConnectionString("DatabaseContext")));
+             options.UseSqlServer(sql));
             services.AddIdentity<IdentityUser, IdentityRole>()
              .AddEntityFrameworkStores<IdentityContext>();
             services.AddDbContext<DatabaseContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DatabaseContext")));
+            options.UseSqlServer(sql));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,8 +98,6 @@ namespace HaberSitesi
                 context2.SaveChanges();
 			}
             var x = context;
-            x.Haberler.RemoveRange(x.Haberler);
-            x.SaveChanges();
             if (x.Haberler.Count() < 15)
             {
                 x.Haberler.RemoveRange(x.Haberler);

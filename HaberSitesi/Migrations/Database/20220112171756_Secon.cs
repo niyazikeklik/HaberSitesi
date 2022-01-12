@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace HaberSitesi.Migrations
+namespace HaberSitesi.Migrations.Database
 {
-    public partial class HBDB : Migration
+    public partial class Secon : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
